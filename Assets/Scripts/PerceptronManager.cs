@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class PerceptronManager : MonoBehaviour
 {
     //Perceptron details
+
+    public int maxVal = 1000, minVal = -1000;
     public Perceptron perceptron;
     [Range(-1000,1000)]
     public int greaterThanValue;
-    double weight1, weight2;
     [Range(0,1)]
     public double adjustmentValue = 0.05;
 
@@ -37,11 +38,10 @@ public class PerceptronManager : MonoBehaviour
         //Set up Perceptron
         trainingInputs = new double[2, numInputs];
         trainingOutputs = new double[numInputs];
-        weight1 = 0.5;
-        weight2 = 0.5;
         
         createRandomInputsAndOutputs(trainingInputs, trainingOutputs);
-        perceptron = new Perceptron(trainingInputs, trainingOutputs, adjustmentValue,greaterThanValue, weight1, weight2);
+        int valueRange = maxVal - minVal;
+        perceptron = new Perceptron(trainingInputs, trainingOutputs, adjustmentValue,greaterThanValue, valueRange);
     }
 
     // Update is called once per frame
@@ -56,7 +56,7 @@ public class PerceptronManager : MonoBehaviour
         {
             for (int j = 0; j < trainingInputs.GetLength(0); j++)
             {
-                inputs[j, i] = Random.Range(-1000, 1000);
+                inputs[j, i] = Random.Range(minVal, maxVal);
             }
             outputs[i] = inputs[0, i] + inputs[1, i] > greaterThanValue ? 1 : 0; 
         }
@@ -67,7 +67,7 @@ public class PerceptronManager : MonoBehaviour
         double correctTests = 0;
         for (int i = 0; i < testSize; i++)
         {
-            correctTests += perceptron.calculateOutput(testingInputs[0, i], testingInputs[1, i]) == testingOutputs[i] ? 1 : 0;
+            correctTests += perceptron.calculateOutput(perceptron.getOneDimensionInputs(testingInputs, i), out double calculation) == testingOutputs[i] ? 1 : 0;
             //Debug.Log("Correct Tests: " + correctTests);
         }
         return (correctTests / testSize) * 100; ;

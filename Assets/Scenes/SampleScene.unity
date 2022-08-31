@@ -344,12 +344,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05b38097e3b480f4bbd90193bed17e4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  greaterThanValue: 48
-  adjustmentValue: 0.008999999612569809
-  numInputs: 100
-  testSize: 7500
-  trainingAccuracy: 0
-  testingAccuracy: 0
+  maxVal: 50
+  minVal: -50
+  greaterThanValue: -19
+  adjustmentValue: 0.00009999999747378752
+  numInputs: 10000
+  testSize: 1000
   trainingAccuracyText: {fileID: 1093950658}
   testingAccuracyText: {fileID: 624736496}
 --- !u!20 &519420031
