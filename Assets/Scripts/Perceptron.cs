@@ -6,21 +6,17 @@ public class Perceptron
 {
     //Perceptron
     //2 Inputs, 1 output
-    //The purpose of this perceptron will be to output 1 if input1 + input2 is > a value x, otherwise 0
+    //The purpose of this perceptron will be to output 1 if input1 + input2 is > a value greaterThanValue, otherwise 0
 
-    double[] weights;
     double[,] inputData;
-    double[] correctOutput;
-    double x;
-    double adjustmentValue;
-    double trainingAccuracy;
-    int valueRange;
+    double[] weights, correctOutput;
+    double adjustmentValue, trainingAccuracy, greaterThanValue;
 
-    public Perceptron(double[,] inputData, double[] correctOutput, double adjustmentValue, double x, int valueRange)
+    public Perceptron(double[,] inputData, double[] correctOutput, double adjustmentValue, double greaterThanValue)
     {
         this.inputData = inputData;
         this.correctOutput = correctOutput;
-        this.x = x;
+        this.greaterThanValue = greaterThanValue;
         weights = new double[2];
 
         for (int i = 0; i < weights.Length; i++)
@@ -29,13 +25,26 @@ public class Perceptron
         }
 
         this.adjustmentValue = adjustmentValue;
-        this.valueRange = Mathf.Abs(valueRange);
-        //this.valueRange = valueRange;
     }
 
-    void setAdjustmentValue(double adjVal)
+    public void setAdjustmentValue(double adjVal)
     {
         adjustmentValue = adjVal;
+    }
+
+    public void setGreaterThanValue(double greaterThanVal)
+    {
+        greaterThanValue = greaterThanVal;
+    }
+
+    public void setInputData(double[,] input)
+    {
+        inputData = input;
+    }
+
+    public void setCorrectOutput(double[] corOutput)
+    {
+        correctOutput = corOutput;
     }
 
     public double train()
@@ -51,7 +60,7 @@ public class Perceptron
                 //Debug.Log("Error: " + error);
                 for (int j = 0; j < weights.Length; j++)
                 {
-                    weights[j] += error * (inputData[j, i] / valueRange) * adjustmentValue;
+                    weights[j] += error * (inputData[j, i]) * adjustmentValue;
                 }
             }
             else
@@ -65,6 +74,7 @@ public class Perceptron
             //Debug.Log($"Weight1: {weights[0]}");
             //Debug.Log($"Weight2: {weights[1]}");
         }
+        //Debug.Log("Training Accuracy: " + trainingAccuracy);
         return trainingAccuracy;
     }
 
@@ -78,23 +88,22 @@ public class Perceptron
             calculation += inputs[i] * weights[i];
             initialSum += inputs[i];
         }
-        //calculation = input1 * weight1 + input2 * weight2;
         //Activation function
-        int returnValue = calculation > 0.5f ? 1 : 0;
-        int correctValue = initialSum >= x ? 1 : 0;
+        int returnValue = calculation > 1 ? 1 : 0;
+        int correctValue = initialSum > greaterThanValue ? 1 : 0;
         if (returnValue != correctValue)
         {
-            Debug.Log($"Sum {initialSum}, guessed {returnValue}, should have been {correctValue}");
+            //Debug.Log($"Sum {initialSum}, guessed {returnValue}, should have been {correctValue}");
         }
         return returnValue;
     }
 
-    public double[] getOneDimensionInputs(double[,] inputs, int index)
+    public double[] getOneDimensionInputs(double[,] inputs, int indegreaterThanValue)
     {
         double[] newInputs = new double[inputs.GetLength(0)];
         for (int i = 0; i < inputs.GetLength(0); i++)
         {
-            newInputs[i] = inputs[i, index];
+            newInputs[i] = inputs[i, indegreaterThanValue];
         }
         return newInputs;
     }
